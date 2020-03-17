@@ -1,0 +1,41 @@
+apiVersion: v1
+data:
+  default.conf: |
+    server {
+        listen       80;
+        server_name  localhost;
+
+        default_type text/html;
+
+        location /stuff.html {
+            root /usr/share/nginx/html;
+        }
+
+        location / {
+            return 200 '<!DOCTYPE html>
+    <html>
+    <head>
+    <title>$request_uri - $hostname</title>
+    </head>
+    You\'ve requested the URL <pre>$request_uri</pre>
+    Your request has been processed by this pod<pre>$hostname</pre>
+    Your ELB:<br>
+    <iframe height="600" width="1000" src="stuff.html"></iframe>
+    </html>';
+        }
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-03-09T16:21:41Z"
+  name: defaultconf
+  namespace: default
+  resourceVersion: "2439273"
+  selfLink: /api/v1/namespaces/default/configmaps/defaultconf
+  uid: 0f929025-6222-11ea-a8a1-02f3d5fa2a08
