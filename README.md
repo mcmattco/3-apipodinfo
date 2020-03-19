@@ -1,5 +1,6 @@
 # 3-apipodinfo
 
+OBJECTIVE:
 trying to make stome stuff happen getting info about the cluster or pods from the cluster API or downward API
 
 # downward API
