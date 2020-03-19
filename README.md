@@ -90,4 +90,13 @@ output:
 ...
 ```
 
+5. deploy alpine container, install curl and jq, add this line to the curl cmd to parse out the dns name:
 
+```
+| jq .status.loadBalancer.ingress[].hostname
+```
+
+output:
+```
+"afd6a42d35d8c11eaaeeb02867eb9d8f-1961914697.us-east-2.elb.amazonaws.com"
+```
