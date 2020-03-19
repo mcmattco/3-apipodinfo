@@ -14,7 +14,7 @@ Let's get that ELB DNS name out of the API
 
 1. first must create a clusterrole for the default service account
 
-this maifest creates the clusterole with read access on everything
+this manifest creates the clusterole with read access on everything
 
 ```
 kind: ClusterRole
