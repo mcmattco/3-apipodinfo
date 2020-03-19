@@ -10,6 +10,8 @@ https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-exp
 
 # cluster API
 
+Let's get that ELB DNS name out of the API
+
 1. first must create a clusterrole for the default service account
 
 this maifest creates the clusterole with read access on everything
@@ -37,3 +39,55 @@ curl \
 -s \
 https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT/api/v1/namespaces/default/services/nginx-alpha
 ```
+
+the output though doesn't give the ELB DNS name:
+
+```
+...
+ "status": {
+    "loadBalancer": {
+...
+```
+
+wut?
+oh yeah, the load balancer lives in the nginx ingress namespace!
+
+3. append the clusterroles.yaml to include the namespace:
+
+```
+ kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  **namespace: ingress-nginx
+  name: service-reader
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["get", "watch", "list"]
+```
+
+4. update the curl command:
+
+```
+curl \
+-H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+--cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+-XGET \
+-H "Accept: application/json" \
+-s \
+https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT/api/v1/namespaces/ingress-nginx/services/ingress-nginx
+```
+
+output:
+```
+...
+  "status": {
+    "loadBalancer": {
+      "ingress": [
+        {
+          "hostname": "afd6a42d35d8c11eaaeeb02867eb9d8f-1961914697.us-east-2.elb.amazonaws.com"
+        }
+...
+```
+
+

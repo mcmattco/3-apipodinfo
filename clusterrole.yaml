@@ -7,3 +7,13 @@ rules:
 - apiGroups: [""] # "" indicates the core API group
   resources: ["*"]
   verbs: ["get", "watch", "list"]
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: ingress-nginx
+  name: service-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["*"]
+  verbs: ["get", "watch", "list"]
