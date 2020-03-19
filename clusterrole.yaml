@@ -5,7 +5,7 @@ metadata:
   name: service-reader
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["*"]
+  resources: ["services"]
   verbs: ["get", "watch", "list"]
 ---
 kind: ClusterRole
@@ -15,5 +15,5 @@ metadata:
   name: service-reader
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["*"]
+  resources: ["services"]
   verbs: ["get", "watch", "list"]
