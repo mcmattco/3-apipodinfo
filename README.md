@@ -13,7 +13,7 @@ https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-exp
 1. first must create a clusterrole for the default service account
 this maifest creates the clusterole with read access on everything
 
-'''
+```
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -23,7 +23,7 @@ rules:
 - apiGroups: [""] # "" indicates the core API group
   resources: ["*"]
   verbs: ["get", "watch", "list"]
-'''
+```
 
 2. then exec to alpha pod and curl API:
 
