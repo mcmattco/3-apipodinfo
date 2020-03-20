@@ -39,3 +39,24 @@ metadata:
   resourceVersion: "2439273"
   selfLink: /api/v1/namespaces/default/configmaps/defaultconf
   uid: 0f929025-6222-11ea-a8a1-02f3d5fa2a08
+---
+apiVersion: v1
+data:
+  script.sh: |
+    curl \
+    -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+    --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+    -XGET \
+    -H "Accept: application/json" \
+    -s \
+    https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT/api/v1/namespaces/ingress-nginx/services/ingress-nginx \
+    | jq .status.loadBalancer.ingress[].hostname \
+    > /work-dir/stuff.html
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-03-20T20:44:02Z"
+  name: scriptdir
+  namespace: default
+  resourceVersion: "5177002"
+  selfLink: /api/v1/namespaces/default/configmaps/workdir
+  uid: 88240e9f-6aeb-11ea-ba7e-0a2662574af4

@@ -22,37 +22,27 @@ spec:
         volumeMounts:
           - name: defaultconf-volume
             mountPath: /etc/nginx/conf.d/
-          - name: workdir
+          - name: workdir-volume
             mountPath: /usr/share/nginx/html/
       volumes:
         - name: defaultconf-volume
           configMap:
             name: defaultconf
-        - name: workdir
+        - name: scriptdir-volume
+          configMap:
+            name: scriptdir
+            defaultMode: 0777
+        - name: workdir-volume
           emptyDir: {}
       initContainers:
       - name: install
-        image: mesosphere/aws-cli
-        env:
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: awskeys
-              key: AWS_ACCESS_KEY_ID
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: awskeys
-              key: AWS_SECRET_ACCESS_KEY
-        - name: AWS_DEFAULT_REGION
-          valueFrom:
-            secretKeyRef:
-              name: awskeys
-              key: AWS_DEFAULT_REGION
-        command: ['sh', '-c', 'aws elb describe-load-balancers > /work-dir/stuff.html']
+        image: mcmattco/jqbox
+        command: ['bash', '/script-dir/script.sh']
         volumeMounts:
-        - name: workdir
-          mountPath: "/work-dir"
+        - name: workdir-volume
+          mountPath: /work-dir
+        - name: scriptdir-volume
+          mountPath: /script-dir
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -78,37 +68,12 @@ spec:
         volumeMounts:
           - name: defaultconf-volume
             mountPath: /etc/nginx/conf.d/
-          - name: workdir
+          - name: workdir-volume
             mountPath: /usr/share/nginx/html/
       volumes:
         - name: defaultconf-volume
           configMap:
             name: defaultconf
-        - name: workdir
-          emptyDir: {}
-      initContainers:
-      - name: install
-        image: mesosphere/aws-cli
-        env:
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: awskeys
-              key: AWS_ACCESS_KEY_ID
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: awskeys
-              key: AWS_SECRET_ACCESS_KEY
-        - name: AWS_DEFAULT_REGION
-          valueFrom:
-            secretKeyRef:
-              name: awskeys
-              key: AWS_DEFAULT_REGION
-        command: ['sh', '-c', 'aws elb describe-load-balancers > /work-dir/stuff.html']
-        volumeMounts:
-        - name: workdir
-          mountPath: "/work-dir"
 ---
 apiVersion: v1
 kind: Service

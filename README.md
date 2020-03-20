@@ -100,3 +100,21 @@ output:
 ```
 "afd6a42d35d8c11eaaeeb02867eb9d8f-1961914697.us-east-2.elb.amazonaws.com"
 ```
+
+1. make new container `jqbox`, based on alpine, install bash, curl, and jq, push to dockerhub
+
+1. create `script.sh` to run curl and jq commands, output to stuff.html in same dir ***this was a problem***
+
+1. modify `configmap.yaml` to include script in new configmap 
+
+1. modify initContainer to run `jqbox` and run `script.sh`, fails
+
+1. test by creating seperate manifest to run jqbox and mount configmap, error `read-only file system'
+
+1. research, find that configmaps are always ro, you have to create a seperate emptyDir volume and dump output there, then mount that volume to main container
+
+1. add `workdir` volumeMount as emptyDir and `scriptdir` volumeMount as mounting the script file
+
+1. change command for initContainer to run from script-dir
+
+1. victory
