@@ -14,7 +14,7 @@ Let's get that ELB DNS name out of the API
 
 1. first must create a clusterrole for the default service account
 
-this maifest creates the clusterole with read access on everything
+this manifest creates the clusterole with read access on everything
 
 ```
 kind: ClusterRole
@@ -58,7 +58,7 @@ oh yeah, the load balancer lives in the nginx ingress namespace!
  kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  **namespace: ingress-nginx
+  namespace: ingress-nginx
   name: service-reader
 rules:
 - apiGroups: [""]
