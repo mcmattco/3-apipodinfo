@@ -60,6 +60,7 @@ spec:
       labels:
         app: nginx-beta
     spec:
+      serviceAccountName: matt
       containers:
       - name: nginx-beta
         image: nginx:latest
@@ -74,6 +75,21 @@ spec:
         - name: defaultconf-volume
           configMap:
             name: defaultconf
+        - name: scriptdir-volume
+          configMap:
+            name: scriptdir
+            defaultMode: 0777
+        - name: workdir-volume
+          emptyDir: {}
+      initContainers:
+      - name: install
+        image: mcmattco/jqbox
+        command: ['bash', '/script-dir/script.sh']
+        volumeMounts:
+        - name: workdir-volume
+          mountPath: /work-dir
+        - name: scriptdir-volume
+          mountPath: /script-dir
 ---
 apiVersion: v1
 kind: Service

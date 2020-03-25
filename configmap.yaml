@@ -20,7 +20,7 @@ data:
     You\'ve requested the URL <pre>$request_uri</pre>
     Your request has been processed by this pod<pre>$hostname</pre>
     Your ELB:<br>
-    <iframe height="600" width="1000" src="stuff.html"></iframe>
+    <iframe height="200" width="600" src="stuff.html"></iframe>
     </html>';
         }
 

@@ -4,7 +4,7 @@ metadata:
   namespace: default
   name: service-reader
 rules:
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: [""]
   resources: ["services"]
   verbs: ["get", "watch", "list"]
 ---
@@ -14,6 +14,6 @@ metadata:
   namespace: ingress-nginx
   name: service-reader
 rules:
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: [""]
   resources: ["services"]
   verbs: ["get", "watch", "list"]

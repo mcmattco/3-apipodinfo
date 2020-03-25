@@ -4,6 +4,7 @@ metadata:
   name: jqbox
   namespace: default
 spec:
+  serviceAccountName: matt
   containers:
   - image: mcmattco/jqbox:latest
     command:
@@ -12,12 +13,12 @@ spec:
       - "sleep 60m"
     imagePullPolicy: IfNotPresent
     name: alpine
-    volumeMounts:
-      - name: workdir-volume
-        mountPath: /work-dir/
+#    volumeMounts:
+#      - name: workdir-volume
+#        mountPath: /work-dir/
   restartPolicy: Always
-  volumes:
-    - name: workdir-volume
-      configMap:
-        name: workdir
-        defaultMode: 0777
+#  volumes:
+#    - name: workdir-volume
+#      configMap:
+#        name: workdir
+#        defaultMode: 0777
