@@ -4,7 +4,6 @@ metadata:
   name: jqbox
   namespace: default
 spec:
-  serviceAccountName: matt
   containers:
   - image: mcmattco/jqbox:latest
     command:

@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: v1
 kind: Deployment
 metadata:
   name: nginx-alpha-deployment
@@ -14,6 +14,7 @@ spec:
       labels:
         app: nginx-alpha
     spec:
+      serviceAccountName: bob
       containers:
       - name: nginx-alpha
         image: nginx:latest
@@ -24,6 +25,8 @@ spec:
             mountPath: /etc/nginx/conf.d/
           - name: workdir-volume
             mountPath: /usr/share/nginx/html/
+          - name: podinfo
+            mountPath: /etc/podinfo
       volumes:
         - name: defaultconf-volume
           configMap:
@@ -34,15 +37,26 @@ spec:
             defaultMode: 0777
         - name: workdir-volume
           emptyDir: {}
+        - name: podinfo
+          downwardAPI:
+            items:
+              - path: "serviceAccountName"
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
       initContainers:
       - name: install
         image: mcmattco/jqbox
+#        env:
+#          - name: MY_POD_SERVICE_ACCOUNT
+#            value: "darthvader"
         command: ['bash', '/script-dir/script.sh']
         volumeMounts:
         - name: workdir-volume
           mountPath: /work-dir
         - name: scriptdir-volume
           mountPath: /script-dir
+        - name: podinfo
+          mountPath: /etc/podinfo
 ---
 apiVersion: apps/v1
 kind: Deployment
