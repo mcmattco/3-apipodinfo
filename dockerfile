@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.15
 
 ENV PACKAGES bash curl jq wget
 
